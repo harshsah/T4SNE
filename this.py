@@ -39,7 +39,7 @@ class MainApp(App):
         layout.add_widget(self.img1)
         layout.add_widget(inner_box)
         layout.add_widget(button_box)
-        self.messageBtn =  Button(text ="this will be the message",
+        self.messageBtn =  Button(text ="App Started",
                         disabled = True,
                         )
         self.typeToggleBtn = Button(text ="Restart",
@@ -100,6 +100,10 @@ class MainApp(App):
         answer = self.getAnswer()
         
         self.messageBtn.text += "\nAnswer: " + answer
+
+        engine = pyttsx3.init()
+        engine.say(answer)
+        engine.runAndWait()
 
         self.typeToggleBtn.disabled = False
         self.capBtn.disabled = False
