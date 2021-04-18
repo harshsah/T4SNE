@@ -12,7 +12,7 @@ Arvind Jha - 17MT10009
 The objective is to design a portable and affordable app, to help **visually impaired individuals** to assist them in traveling around and provide information about their surroundings. 
 
 ### Demo of the app: 
-https://www.youtube.com/watch?v=dFS_E4YjFGA
+[![DEMO](http://img.youtube.com/vi/dFS_E4YjFGA/0.jpg)](http://www.youtube.com/watch?v=dFS_E4YjFGA "Demo")
 
 ### How to use the App
 Here are the elements of the app:
@@ -31,6 +31,10 @@ We have implemented Visual Question Answering Model proposed by [Multi-modal Fac
 The model takes an image and a question string as inputs and outputs an answer string.
 
 ### Future improvements
-One can add modules to the app so that all the functions mentioned above are voice activated or be coupled to some external hard buttons. 
+- The buttons functions can be mapped to voice commands or external buttons, for ease of use.
+- We can reduce the size of the model for faster processing.
+- We can find external high computing server to host the model for faster usage.
+- The app can be converted into corresponding a mobile app or a web app with the help of extra tools.
+- All the processing can be done on a microprocessor like Raspberry Pi and embed it into more convinient format like glasses.
 
 
