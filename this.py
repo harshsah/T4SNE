@@ -10,6 +10,7 @@ from kivy.uix.button import Button
 import cv2
 from gtts import gTTS
 import os
+import time
 
 import sounddevice as sd
 from scipy.io.wavfile import write
@@ -22,11 +23,18 @@ import pyttsx3
 # Sampling frequency
 FREQ = 44100
 # Recording duration
-DURATION = 10
+DURATION = 7
 # Name fof the video file 
 VIDEO_FILE_NAME = "video.mp4"
 # URL
 URL = 'http://192.168.43.1:8080/video' ## Change the url
+"""
+TYPE = 1 : use all three
+TYPE = 2 : use only video and ip-cam
+TYPE = 3 : use only video
+"""
+TYPE = 1
+
 
 class MainApp(App):
 
@@ -56,8 +64,12 @@ class MainApp(App):
         button_box.add_widget(self.swithcBtn)
         button_box.add_widget(self.capBtn)
         #opencv2 stuffs
-        self.camIndex = 0
-        self.capture = cv2.VideoCapture(self.camIndex, cv2.CAP_DSHOW)
+        if TYPE == 1:
+            self.camIndex = 0
+            self.capture = cv2.VideoCapture(self.camIndex, cv2.CAP_DSHOW)
+        else:
+            self.camIndex = 1
+            self.capture = cv2.VideoCapture(VIDEO_FILE_NAME )
         # cv2.namedWindow("CV2 Image")
         self.clock = Clock.schedule_interval(self.update, 1.0/33.0)
         return layout
@@ -97,6 +109,10 @@ class MainApp(App):
         
         self.messageBtn.text = "Your Question: " + self.questionText
 
+        print("Before time")
+        time.sleep(2)
+        print("After time")
+
         answer = self.getAnswer()
         
         self.messageBtn.text += "\nAnswer: " + answer
@@ -116,27 +132,46 @@ class MainApp(App):
 
     def switch_camera(self, event):
         print("swtich button pressed")
-        if self.camIndex == 0:
-            self.showVideo = False
-            del(self.capture)
-            self.camIndex = 1
-            self.capture = cv2.VideoCapture(VIDEO_FILE_NAME )
-        elif self.camIndex == 1:
-            self.showVideo = False
-            del(self.capture)
-            self.camIndex = 2
-            self.capture = cv2.VideoCapture(URL)
-        elif self.camIndex == 2:
-            self.showVideo = False
-            del(self.capture)
-            self.camIndex = 0
-            self.capture = cv2.VideoCapture(self.camIndex, cv2.CAP_DSHOW)
+        if TYPE == 1:
+            if self.camIndex == 0:
+                self.showVideo = False
+                del(self.capture)
+                self.camIndex = 1
+                self.capture = cv2.VideoCapture(VIDEO_FILE_NAME )
+            elif self.camIndex == 1:
+                self.showVideo = False
+                del(self.capture)
+                self.camIndex = 2
+                self.capture = cv2.VideoCapture(URL)
+            elif self.camIndex == 2:
+                self.showVideo = False
+                del(self.capture)
+                self.camIndex = 0
+                self.capture = cv2.VideoCapture(self.camIndex, cv2.CAP_DSHOW)
+        elif TYPE == 2:
+            if self.camIndex == 1:
+                self.showVideo = False
+                del(self.capture)
+                self.camIndex = 2
+                self.capture = cv2.VideoCapture(URL)
+            elif self.camIndex == 2:
+                self.showVideo = False
+                del(self.capture)
+                self.camIndex = 1
+                self.capture = cv2.VideoCapture(VIDEO_FILE_NAME )
+        else:
+        	pass
 
         success, frame = self.capture.read()
         if not success:
-            self.camIndex = 0
-            del(self.capture)
-            self.capture = cv2.VideoCapture(self.camIndex, cv2.CAP_DSHOW)  
+            if TYPE == 1:
+                self.camIndex = 0
+                del(self.capture)
+                self.capture = cv2.VideoCapture(self.camIndex, cv2.CAP_DSHOW)  
+            else:
+                self.camIndex = 1
+                del(self.capture)
+                self.capture = cv2.VideoCapture(VIDEO_FILE_NAME )
         self.showVideo = True 
 
     def launchChildApp(self, button):
